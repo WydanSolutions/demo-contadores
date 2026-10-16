@@ -20,7 +20,7 @@
  * Por eso los datos llevan versión: al abrir, si la copia guardada es de una versión anterior, se
  * rehacen los ejemplos (ver Store.load() en datos.js). Solo pasa en MODO_DEMO.
  * ⚠ CADA VEZ QUE SE CAMBIEN LOS EJEMPLOS DE ESTE ARCHIVO, SUBIR ESTE NÚMERO. */
-var EJ_VERSION = 1;
+var EJ_VERSION = 2;  // 2 (16/10/2026): 12 clientes «solo IRPF» y la temporada de IRPF en la carpeta IASS / IRPF
 
 /* ===== Ayudas de fechas ===== */
 function ejHoy(){ return new Date(); }
@@ -38,7 +38,8 @@ function ejF(m, d){
 function ejVar(a, b, tope){ return (a * 17 + b * 29) % tope; }
 
 /* ===== Info. Clientes ===== */
-/* 20 clientes inventados, de los rubros típicos de un estudio del interior. */
+/* 32 clientes inventados, de los rubros típicos de un estudio del interior.
+   Del c21 al c32 son personas que el estudio atiende solo en la temporada de IRPF. */
 function ejemploClientes(){
   return [
     {id:'c1', nombre:'Silveira, Valentina', tipo:'Persona física', rut:'', ci:'4.987.321-5', bps:'', fnac:'1988-07-04', whatsapp:'099 445 566', correo:'valentina@ejemplo.com', direccion:'Agraciada 1123', fosmetal:'', otros:'', notas:'Paga siempre los primeros días del mes.'},
@@ -61,6 +62,18 @@ function ejemploClientes(){
     {id:'c18', nombre:'Cerrajería Rivera SRL', tipo:'Empresa', rut:'21 002244 0017', ci:'', bps:'8011776', fnac:'', whatsapp:'092 115 004', correo:'', direccion:'Ceballos 1402', fosmetal:'', otros:'', notas:''},
     {id:'c19', nombre:'Sosa, Fernanda', tipo:'Persona física', rut:'', ci:'4.556.112-8', bps:'', fnac:'1986-12-02', whatsapp:'099 887 221', correo:'fsosa@ejemplo.com', direccion:'', fosmetal:'', otros:'', notas:'Escribana.'},
     {id:'c20', nombre:'Agropecuaria del Tacuarembó SA', tipo:'Empresa', rut:'21 445511 0019', ci:'', bps:'6509873', fnac:'', whatsapp:'094 006 331', correo:'agro.tbo@ejemplo.com', direccion:'Ruta 26 km 12', fosmetal:'', otros:'', notas:'Ejercicio cerrado en abril.'},
+    {id:'c21', nombre:'Acosta, Martín', tipo:'Persona física', rut:'', ci:'3.904.217-6', bps:'', fnac:'1979-04-11', whatsapp:'099 201 554', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Docente. Solo IRPF anual.'},
+    {id:'c22', nombre:'Bentancor, Sofía', tipo:'Persona física', rut:'', ci:'4.613.882-1', bps:'', fnac:'1990-08-30', whatsapp:'098 552 013', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Enfermera. Solo IRPF anual.'},
+    {id:'c23', nombre:'Cardozo, Diego', tipo:'Persona física', rut:'', ci:'4.027.551-9', bps:'', fnac:'1984-01-17', whatsapp:'094 880 216', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Empleado bancario. Solo IRPF anual.'},
+    {id:'c24', nombre:'De León, Carolina', tipo:'Persona física', rut:'', ci:'5.230.664-4', bps:'', fnac:'1996-06-05', whatsapp:'099 741 302', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Solo IRPF anual. Pide devolución todos los años.'},
+    {id:'c25', nombre:'Fernández, Pablo', tipo:'Persona física', rut:'', ci:'3.551.098-2', bps:'', fnac:'1972-10-22', whatsapp:'092 336 905', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Alquila dos apartamentos. IRPF por arrendamientos.'},
+    {id:'c26', nombre:'Gómez, Ana Laura', tipo:'Persona física', rut:'', ci:'4.448.120-7', bps:'', fnac:'1987-03-09', whatsapp:'099 118 447', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Solo IRPF anual.'},
+    {id:'c27', nombre:'Moreira, Cecilia', tipo:'Persona física', rut:'', ci:'3.775.402-5', bps:'', fnac:'1969-12-14', whatsapp:'098 007 661', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Jubilada con rentas de capital.'},
+    {id:'c28', nombre:'Píriz, Andrea', tipo:'Persona física', rut:'', ci:'5.004.389-8', bps:'', fnac:'1993-09-27', whatsapp:'094 552 870', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Solo IRPF anual.'},
+    {id:'c29', nombre:'Rodríguez, Natalia', tipo:'Persona física', rut:'', ci:'4.390.776-0', bps:'', fnac:'1985-05-02', whatsapp:'099 664 125', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Trabaja en dos empresas. Solo IRPF anual.'},
+    {id:'c30', nombre:'Silva, Bruno', tipo:'Persona física', rut:'', ci:'4.812.553-3', bps:'', fnac:'1991-11-19', whatsapp:'092 771 048', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Solo IRPF anual.'},
+    {id:'c31', nombre:'Suárez, Federico', tipo:'Persona física', rut:'', ci:'3.661.209-4', bps:'', fnac:'1975-07-08', whatsapp:'099 305 992', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Rentas de capital (plazo fijo). Solo IRPF anual.'},
+    {id:'c32', nombre:'Viera, Gonzalo', tipo:'Persona física', rut:'', ci:'4.155.830-6', bps:'', fnac:'1982-02-24', whatsapp:'098 420 336', correo:'', direccion:'', fosmetal:'', otros:'', notas:'Solo IRPF anual. Mandó los papeles tarde.'},
   ];
 }
 
@@ -123,6 +136,21 @@ function ejemploDeclaraciones(){
   add('iass', 'c14', 'IRPF anual · rentas de trabajo', 5, 5, 'Presentada', 4100, 'Transferencia');
   add('iass', 'c1',  'IRPF anual · rentas de trabajo', 5, 5, 'Presentada', 7300, 'BROU');
   add('iass', 'c6',  'Devolución IRPF · trámite', mm + 1, 5, 'Pendiente', 0, '');
+  // Temporada de IRPF: los clientes «solo IRPF» (c21 a c32). Julio = 6, agosto = 7.
+  add('iass', 'c21', 'IRPF anual · rentas de trabajo', 6, 28, 'Presentada', 6200, 'BROU');
+  add('iass', 'c22', 'IRPF anual · rentas de trabajo', 6, 28, 'Presentada', 3900, 'Transferencia');
+  add('iass', 'c23', 'IRPF anual · rentas de trabajo', 6, 28, 'Presentada', 15400, 'Transferencia');
+  add('iass', 'c24', 'IRPF anual · rentas de trabajo', 6, 28, 'Presentada', 0, 'Devolución');
+  add('iass', 'c25', 'IRPF anual · arrendamientos', 7, 21, 'Presentada', 22800, 'BROU');
+  add('iass', 'c26', 'IRPF anual · rentas de trabajo', 7, 21, 'Presentada', 5100, 'Itaú');
+  add('iass', 'c27', 'IRPF anual · rentas de capital', 7, 21, 'Presentada', 8750, 'BROU');
+  add('iass', 'c28', 'IRPF anual · rentas de trabajo', 7, 21, 'Presentada', 2600, 'Transferencia');
+  add('iass', 'c29', 'IRPF anual · rentas de trabajo', 7, 21, 'Presentada', 11300, 'Transferencia');
+  add('iass', 'c30', 'IRPF anual · rentas de trabajo', 7, 21, 'Presentada', 4450, 'Efectivo');
+  add('iass', 'c31', 'IRPF anual · rentas de capital', 7, 21, 'Presentada', 9900, 'BROU');
+  add('iass', 'c32', 'IRPF anual · fuera de plazo', mm, 30, 'En proceso', 0, '');
+  add('iass', 'c24', 'Devolución IRPF · trámite', mm + 1, 5, 'Pendiente', 0, '');
+  add('iass', 'c29', 'IRPF anual · rectificativa', mm, 24, 'Pendiente', 0, '');
   return out;
 }
 
